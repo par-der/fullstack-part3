@@ -13,3 +13,16 @@ GET http://localhost:3001/api/persons/1
 # Delete person with id
 DELETE http://localhost:3001/api/persons/1
 ###
+
+# Post person with id
+POST http://localhost:3001/api/persons/5
+###
+
+# Add a new person
+POST http://localhost:3001/api/persons
+Content-Type: application/json
+
+{
+    "name": "Egor Terentev",
+    "number": "23 45 567 235 45"
+}
