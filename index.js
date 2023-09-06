@@ -65,6 +65,20 @@ app.post("/api/persons", (request, response) => {
     });
   }
 
+  if (!body.number) {
+    return response.status(404).json({
+      error: "Missing number",
+    });
+  }
+
+  const alreadyExist = !!persons.find((person) => person.name === body.name);
+
+  if (alreadyExist) {
+    return response.status(400).json({
+      error: "person already exists",
+    });
+  }
+
   const person = {
     id: generateId(),
     name: body.name,
