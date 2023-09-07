@@ -3,8 +3,16 @@ const app = express();
 const morgan = require('morgan');
 
 app.use(express.json());
-app.use(morgan("tiny"));
+// Настраиваем Morgan для логирования. 
+// В этом примере мы логируем стандартный 'tiny' формат + тело запроса.
+app.use(morgan(":method :url :status :res[content-length] - :response-time ms :body"));
+
 const generateId = () => Math.floor(Math.random() * 1000);
+
+// Создаем токен для Morgan, чтобы логировать тело запроса
+morgan.token('body', function (req) { 
+    return JSON.stringify(req.body);
+});
 
 let persons = [
     { 
