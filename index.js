@@ -1,11 +1,13 @@
 const express = require('express');
 const app = express();
 const morgan = require('morgan');
+const cors = require('cors');
 
 app.use(express.json());
 // Настраиваем Morgan для логирования. 
 // В этом примере мы логируем стандартный 'tiny' формат + тело запроса.
 app.use(morgan(":method :url :status :res[content-length] - :response-time ms :body"));
+app.use(cors());
 
 const generateId = () => Math.floor(Math.random() * 1000);
 

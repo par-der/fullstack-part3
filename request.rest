@@ -26,3 +26,7 @@ Content-Type: application/json
     "name": "Egor Terentev",
     "number": "23 45 567 235 45"
 }
+###
+
+GET http://localhost:3001/api/persons
+###
