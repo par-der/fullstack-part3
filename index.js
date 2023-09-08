@@ -11,6 +11,8 @@ app.use(cors());
 
 const generateId = () => Math.floor(Math.random() * 1000);
 
+app.use(express.static('build'));
+
 // Создаем токен для Morgan, чтобы логировать тело запроса
 morgan.token('body', function (req) { 
     return JSON.stringify(req.body);
