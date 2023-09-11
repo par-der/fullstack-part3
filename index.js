@@ -64,59 +64,47 @@ app.get('/api/persons/:id', (request, response) => {
   });
 });
 
-app.delete('/api/persons/:id', (request, response) => {
-  const id = Number(request.params.id)
-  notes = notes.filter(note => note.id !== id)
-
-  response.status(204).end()
+app.delete('/api/persons/:id', (request, response, next) => {
+  Person.findByIdAndRemove(request.params.id)
+    .then(result => {
+      if (result) {
+        response.status(204).end();
+      } else {
+        response.status(404).json({ error: 'person not found' });
+      }
+    })
+    .catch(error => next(error));
 });
+
 
 app.post("/api/persons", (request, response) => {
-    const body = request.body;
+  const body = request.body;
 
-    if (!body.name) {
-        return response.status(400).json({
-            error: "Missing name",
-        });
-    }
+  if (!body.name) {
+    response.status(404).json({
+      error: "Missing name",
+    });
+  }
 
-    if (!body.number) {
-        return response.status(400).json({
-            error: "Missing number",
-        });
-    }
+  if (!body.number) {
+    return response.status(404).json({
+      error: "Missing number",
+    });
+  }
 
-    // Проверка на наличие имени в базе данных
-    Person.findOne({ name: body.name })
-        .then(existingPerson => {
-            if (existingPerson) {
-                return response.status(400).json({
-                    error: "person already exists",
-                });
-            }
+  const person = new Person({
+    id: generateId(),
+    name: body.name,
+    number: body.number || "",
+  });
 
-            // Создание новой записи, если контакт с таким именем не найден
-            const person = new Person({
-                name: body.name,
-                number: body.number
-            });
+  //persons = [...persons, person];
 
-            person.save()
-                .then(savedPerson => {
-                    response.json(savedPerson);
-                })
-                .catch(error => {
-                    response.status(500).json({
-                        error: "an error occurred while saving the person"
-                    });
-                });
-        })
-        .catch(error => {
-            response.status(500).json({
-                error: "an error occurred while checking the database"
-            });
-        });
+  person.save().then(savedPerson => {
+    response.json(savedPerson)
+  })
 });
+
 
 const PORT = process.env.PORT;
 app.listen(PORT, () => {

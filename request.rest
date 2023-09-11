@@ -11,7 +11,7 @@ GET http://localhost:3001/api/persons/64feef95ac422eae6612fcc8
 ###
 
 # Delete person with id
-DELETE http://localhost:3001/api/persons/1
+DELETE http://localhost:3001/api/persons/64feef95ac422eae6612fcc8
 ###
 
 # Post person with id
@@ -23,7 +23,7 @@ POST http://localhost:3001/api/persons
 Content-Type: application/json
 
 {
-    "name": "Fedor Terentev",
+    "name": "Fedo Terentev",
     "number": "23 45 567 235 45"
 }
 ###
