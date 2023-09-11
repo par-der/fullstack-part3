@@ -72,37 +72,50 @@ app.delete('/api/persons/:id', (request, response) => {
 });
 
 app.post("/api/persons", (request, response) => {
-  const body = request.body;
+    const body = request.body;
 
-  if (!body.name) {
-    response.status(404).json({
-      error: "Missing name",
-    });
-  }
+    if (!body.name) {
+        return response.status(400).json({
+            error: "Missing name",
+        });
+    }
 
-  if (!body.number) {
-    return response.status(404).json({
-      error: "Missing number",
-    });
-  }
+    if (!body.number) {
+        return response.status(400).json({
+            error: "Missing number",
+        });
+    }
 
-  const alreadyExist = !!persons.find((person) => person.name === body.name);
+    // Проверка на наличие имени в базе данных
+    Person.findOne({ name: body.name })
+        .then(existingPerson => {
+            if (existingPerson) {
+                return response.status(400).json({
+                    error: "person already exists",
+                });
+            }
 
-  if (alreadyExist) {
-    return response.status(400).json({
-      error: "person already exists",
-    });
-  }
+            // Создание новой записи, если контакт с таким именем не найден
+            const person = new Person({
+                name: body.name,
+                number: body.number
+            });
 
-  const person = {
-    id: generateId(),
-    name: body.name,
-    number: body.number || "",
-  };
-
-  persons = [...persons, person];
-
-  response.json(person);
+            person.save()
+                .then(savedPerson => {
+                    response.json(savedPerson);
+                })
+                .catch(error => {
+                    response.status(500).json({
+                        error: "an error occurred while saving the person"
+                    });
+                });
+        })
+        .catch(error => {
+            response.status(500).json({
+                error: "an error occurred while checking the database"
+            });
+        });
 });
 
 const PORT = process.env.PORT;
