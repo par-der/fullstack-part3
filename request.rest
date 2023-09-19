@@ -29,7 +29,7 @@ Content-Type: application/json
 ###
 
 # Update person number
-PUT http://localhost:3001/api/people/6509435b4bbb4067cd2b29e1
+PUT http://localhost:3001/api/persons/6509435b4bbb4067cd2b29e1
 Content-Type: application/json
 
 {
