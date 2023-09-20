@@ -3,7 +3,7 @@ const express = require('express');
 const app = express();
 const morgan = require('morgan');
 const cors = require('cors');
-const Person = require('./models/persons')
+const Person = require('./models/persons');
 
 app.use(express.json());
 // Настраиваем Morgan для логирования. 
